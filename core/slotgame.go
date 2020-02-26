@@ -1,52 +1,71 @@
 package core
 
 import (
-	"fmt"
+	"math/rand"
 )
 
-//賠率物件
-type Symbol struct {
-	Id   int    //物件號碼
-	Name string //物件名稱
-	Odds int    //賠率
-}
+//https://online808.com/other/1305
 
-//得獎物件
-type Lott struct {
-	TableSymbol [9]int      //盤面元素ID
-	Lines       map[int]int //key:中獎線,value:賠率
-	GetOdds     int         //總賠率
-}
+//存放符號和賠率
+//(0)10號 (1)J (2)Q (3)K (4)A
+//(5)硯台 (6)紙 (7)墨 (8)毛筆
+//(9)百搭 (10)免費
+
+//盤面排序方式
+//0  1  2  3  4
+//5  6  7  8  9
+//10 11 12 13 14
+
+//規則
+//百搭 出現在 2 3 4 5滾輪
+//Scatter 出現在 2 3 4滾輪
+
+//再附上excel
 
 var (
-	AllSymbol []Symbol //全局賠率用物件
+	//賠率
+	Odds [11][3]int = [11][3]int{{5, 20, 100}, {5, 25, 125}, {5, 25, 125}, {10, 25, 125}, {10, 25, 125}, {20, 100, 300}, {20, 100, 300}, {25, 150, 500}, {50, 250, 1000}, {0, 0, 0}, {0, 0, 0}}
+	//連線位置
+	WinLines [20][5]int = [20][5]int{{5, 6, 7, 8, 9}, {0, 1, 2, 3, 4}, {10, 11, 12, 13, 14}, {0, 6, 12, 8, 4}, {10, 6, 2, 8, 14}, {0, 1, 7, 13, 14}, {10, 11, 7, 3, 4}, {5, 1, 7, 13, 9}, {5, 11, 7, 3, 9}, {0, 6, 7, 8, 14}, {10, 6, 7, 8, 4}, {5, 1, 2, 8, 14}, {5, 11, 12, 8, 4}, {5, 6, 2, 8, 14}, {5, 6, 12, 8, 4}, {0, 1, 7, 13, 9}, {10, 11, 7, 3, 9}, {5, 1, 7, 13, 14}, {5, 11, 7, 3, 4}, {0, 1, 2, 8, 14}}
+	//wild的號碼
+	WildID = 9
+	//scatter的號碼
+	FreeID = 10
 
+	//滾輪長度
+	Reels [5][]int = [5][]int{
+		[]int{0, 2, 1, 4, 6, 1, 4, 1, 0, 0, 0, 3, 0, 4, 2, 2, 2, 5, 5, 0, 1, 6, 5, 3, 7, 1, 6, 2, 8, 0, 6, 4, 5, 7, 3, 5, 2, 1, 0, 3, 4, 3, 0, 1, 1, 7, 1, 2, 0, 2},
+		[]int{2, 7, 1, 5, 6, 3, 0, 5, 2, 1, 0, 4, 3, 1, 2, 2, 5, 1, 0, 8, 0, 3, 5, 1, 2, 3, 8, 6, 1, 1, 4, 4, 9, 7, 7, 0, 6, 3, 2, 2, 0, 5, 0, 4, 0, 0, 10, 4, 1, 6},
+		[]int{3, 2, 0, 5, 7, 10, 7, 1, 2, 0, 0, 6, 0, 5, 2, 3, 4, 8, 8, 0, 4, 7, 0, 2, 1, 6, 3, 4, 2, 6, 1, 5, 3, 2, 9, 1, 0, 1, 0, 4, 1, 6, 5, 4, 0, 5, 3, 1, 1, 2},
+		[]int{1, 3, 0, 1, 7, 7, 1, 4, 5, 6, 2, 4, 6, 3, 0, 9, 0, 4, 0, 2, 3, 5, 0, 10, 4, 0, 5, 0, 8, 2, 2, 5, 5, 2, 3, 0, 2, 1, 6, 8, 7, 1, 3, 1, 6, 1, 4, 0, 1, 2},
+		[]int{8, 4, 3, 0, 5, 6, 1, 1, 2, 2, 0, 3, 7, 3, 2, 3, 7, 4, 5, 0, 4, 8, 1, 3, 2, 6, 6, 5, 2, 7, 0, 4, 0, 0, 5, 1, 2, 2, 1, 1, 6, 4, 0, 9, 0, 3, 0, 5, 1, 1},
+	}
 )
 
-func init() {
-	//清空元素
-	AllSymbol = AllSymbol[:0]
-	//放入物件
-	AllSymbol = append(AllSymbol, Symbol{0, "櫻桃", 5})
-	AllSymbol = append(AllSymbol, Symbol{1, "橘子", 10})
-	AllSymbol = append(AllSymbol, Symbol{2, "葡萄", 15})
-	AllSymbol = append(AllSymbol, Symbol{3, "西瓜", 20})
-	AllSymbol = append(AllSymbol, Symbol{4, "銅鐘", 25})
-	AllSymbol = append(AllSymbol, Symbol{5, "星星", 40})
-	AllSymbol = append(AllSymbol, Symbol{6, "BAR", 50})
-	AllSymbol = append(AllSymbol, Symbol{7, "雙色7", 60})
-	AllSymbol = append(AllSymbol, Symbol{8, "紅色7", 80})
-	AllSymbol = append(AllSymbol, Symbol{9, "藍色7", 100})
+//取得隨機的盤面
+func RandomGet() [15]int {
 
-	fmt.Println("載入成功")
+	ReturnLott := [15]int{}
+
+	for i := 0; i < 5; i++ {
+		reelmax := len(Reels[i]) - 1
+		r := rand.Intn(reelmax)
+
+		//fmt.Println("r:", r)
+		ReturnLott[10+i] = Reels[i][r]
+		ReturnLott[5+i] = Reels[i][GetReelIndex(r, reelmax)]
+		ReturnLott[i] = Reels[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
+	}
+
+	return ReturnLott
 }
 
-func GetLott() *Lott {
-	//第二種想法是有全盤
-
-	//或是可以拿之前slot_rtp的滾輪條直接用 再附上excel
-
-	//直接改成15輪 (文房四寶)
-
-	return &Lott{}
+//得到下一個滾輪號
+func GetReelIndex(NowIndex int, reelmax int) int {
+	if NowIndex >= reelmax {
+		return 0
+	}
+	return NowIndex + 1
 }
+
+//計算金額 賠率 包成物件回傳
