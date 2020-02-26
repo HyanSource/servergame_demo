@@ -56,6 +56,23 @@ func (p *Player) OnLineEvent() {
 	p.SendMsg(1, data)
 }
 
+//玩家下線事件
+func (p *Player) OffLineEvent() {
+
+	//封裝消息
+	msg := &pb.PlayerData{
+		PlayerID:    p.PlayerID,
+		PlayerName:  "",
+		PlayerMoney: 0,
+	}
+
+	//給所有玩家傳達離線的訊息
+	for _, player := range PlayerManageInstance.AllPlayer {
+		player.SendMsg(201, msg)
+	}
+
+}
+
 //傳送訊息
 func (p *Player) SendMsg(msgID uint32, data proto.Message) {
 

@@ -2,8 +2,15 @@ syntax = "proto3";             //Proto協議
 package pb;                    //包名稱
 option csharp_namespace="Pb";  //給C#的選項
 
+//給玩家的資訊
 message PlayerData {
     int32 PlayerID=1;
     string PlayerName=2;
     int32 PlayerMoney=3;
+}
+
+//給伺服器下注資訊
+message Bet {
+    int32 PlayerID=1;
+    int32 Bet=2;
 }

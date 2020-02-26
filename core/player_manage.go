@@ -55,7 +55,11 @@ func (pm *PlayerManage) GetAllPlayerData() []*Player {
 	pm.PlayersLock.Lock()
 	defer pm.PlayersLock.Unlock()
 
-	AllPlayer := make([]*Player, 0)
+	getallplayer := make([]*Player, 0)
 
-	return AllPlayer
+	for _, v := range pm.AllPlayer {
+		getallplayer = append(getallplayer, v)
+	}
+
+	return getallplayer
 }
