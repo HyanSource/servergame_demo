@@ -22,10 +22,16 @@ message LineOdds {
     int32 GetOdds=3;
 }
 
-//遊戲結果 (可以加上oneof看看)
+//遊戲結果
 message GameResult {
     string Result=1;
     repeated LineOdds LinesOdds=2;
     int32 ScatterCount=3;
     int32 AllOdds=4;
+}
+
+message ReturnGameResult {
+    int32 AllMoney=1;
+    int32 GetMoney=2;
+    GameResult GameResult=3;
 }
