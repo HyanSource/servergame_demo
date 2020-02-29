@@ -5,6 +5,8 @@ import (
 	"math/rand"
 	"strconv"
 	"strings"
+
+	"github.com/hyansource/servergame_demo/pb"
 )
 
 //https://online808.com/other/1305
@@ -95,10 +97,10 @@ func GetReelIndex(NowIndex int, reelmax int) int {
 }
 
 //新增一個遊戲結果的物件
-func NewGameResult(Lott [15]int) *GameResult {
+func NewGameResult(Lott [15]int) *pb.GameResult {
 
 	//儲存每個得獎
-	alllineodds := make([]LineOdds, 0)
+	alllineodds := make([]*pb.LineOdds, 0)
 	scattercount := 0
 	allodds := 0
 
@@ -113,22 +115,33 @@ func NewGameResult(Lott [15]int) *GameResult {
 			(firstsymbol == Lott[v[3]] || Lott[v[3]] == WildID) &&
 			(firstsymbol == Lott[v[4]] || Lott[v[4]] == WildID) {
 
-			alllineodds = append(alllineodds, LineOdds{k, 5, Odds[firstsymbol][2]})
+			alllineodds = append(alllineodds, &pb.LineOdds{
+				GetID:    int32(k),
+				GetCount: 5,
+				GetOdds:  int32(Odds[firstsymbol][2]),
+			})
 			allodds += Odds[firstsymbol][2]
 
 		} else if (firstsymbol == Lott[v[1]] || Lott[v[1]] == WildID) &&
 			(firstsymbol == Lott[v[2]] || Lott[v[2]] == WildID) &&
 			(firstsymbol == Lott[v[3]] || Lott[v[3]] == WildID) {
 
-			alllineodds = append(alllineodds, LineOdds{k, 4, Odds[firstsymbol][1]})
+			alllineodds = append(alllineodds, &pb.LineOdds{
+				GetID:    int32(k),
+				GetCount: 4,
+				GetOdds:  int32(Odds[firstsymbol][1]),
+			})
 			allodds += Odds[firstsymbol][1]
 
 		} else if (firstsymbol == Lott[v[1]] || Lott[v[1]] == WildID) &&
 			(firstsymbol == Lott[v[2]] || Lott[v[2]] == WildID) {
 
-			alllineodds = append(alllineodds, LineOdds{k, 3, Odds[firstsymbol][0]})
+			alllineodds = append(alllineodds, &pb.LineOdds{
+				GetID:    int32(k),
+				GetCount: 3,
+				GetOdds:  int32(Odds[firstsymbol][0]),
+			})
 			allodds += Odds[firstsymbol][0]
-
 		}
 
 	}
@@ -140,11 +153,11 @@ func NewGameResult(Lott [15]int) *GameResult {
 		}
 	}
 
-	return &GameResult{
+	return &pb.GameResult{
 		Result:       ArrayToString(Lott, ","),
 		LinesOdds:    alllineodds,
-		ScatterCount: scattercount,
-		AllOdds:      allodds,
+		ScatterCount: int32(scattercount),
+		AllOdds:      int32(allodds),
 	}
 }
 
