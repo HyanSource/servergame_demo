@@ -14,3 +14,18 @@ message Bet {
     int32 PlayerID=1;
     int32 Bet=2;
 }
+
+//單線的賠率
+message LineOdds {
+    int32 GetID=1;
+    int32 GetCount=2;
+    int32 GetOdds=3;
+}
+
+//遊戲結果 (可以加上oneof看看)
+message GameResult {
+    string Result=1;
+    repeated LineOdds LinesOdds=2;
+    int32 ScatterCount=3;
+    int32 AllOdds=4;
+}
