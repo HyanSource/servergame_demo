@@ -95,3 +95,22 @@ func (p *Player) SendMsg(msgID uint32, data proto.Message) {
 	}
 
 }
+
+//遊玩一次normalgame
+func (p *Player) PlayNormalGame(bet int32) {
+
+	if (p.PlayerMoney - bet) < 0 {
+		fmt.Println("playermoney<=0")
+		return
+	}
+
+	if bet == 0 {
+		fmt.Println("bet==0")
+		return
+	}
+
+	t := NewGameResult(RandomGet())
+
+	p.SendMsg(100, t)
+
+}
