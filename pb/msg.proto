@@ -29,9 +29,19 @@ message GameResult {
     int32 ScatterCount=3;
     int32 AllOdds=4;
 }
-
+//金額和遊戲結果
 message ReturnGameResult {
     int32 AllMoney=1;
     int32 GetMoney=2;
     GameResult GameResult=3;
+}
+//聊天訊息
+message TalkMsg {   
+    string content=1;
+}
+
+//廣播
+message BroadCast{
+    int32 PlayerID=1;
+    TalkMsg TalkMsg=2;
 }
