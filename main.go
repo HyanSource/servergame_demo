@@ -3,12 +3,11 @@ package main
 import (
 	"fmt"
 
-	//"zinx/ziface"
-	//"zinx/znet"
-
 	"github.com/aceld/zinx/ziface"
 	"github.com/aceld/zinx/znet"
 
+	"github.com/hyansource/servergame_demo/api"
+	_ "github.com/hyansource/servergame_demo/api"
 	"github.com/hyansource/servergame_demo/core"
 )
 
@@ -51,7 +50,7 @@ func main() {
 	ser.SetOnConnStop(OnConnectionLost)
 
 	//註冊路由
-	//ser.AddRouter()
+	ser.AddRouter(100, &api.NormalGameApi{})
 	//ser.AddRouter()
 
 	ser.Serve()

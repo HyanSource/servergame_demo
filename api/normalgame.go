@@ -2,9 +2,8 @@ package api
 
 import (
 	"fmt"
-	_ "fmt"
-	"zinx/ziface"
 
+	"github.com/aceld/zinx/ziface"
 	"github.com/aceld/zinx/znet"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyansource/servergame_demo/core"
@@ -28,7 +27,7 @@ func (*NormalGameApi) Handle(request ziface.IRequest) {
 	}
 
 	//得知當前消息是從哪個玩家傳送來的
-	pid, err := request.GetConnection().GetProperty("pid")
+	pid, err := request.GetConnection().GetProperty("id")
 
 	if err != nil {
 		fmt.Println("GetProperty err:", err)
