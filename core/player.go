@@ -108,9 +108,18 @@ func (p *Player) PlayNormalGame(bet int32) {
 		fmt.Println("bet==0")
 		return
 	}
-
+	//取得盤面
 	t := NewGameResult(RandomGet())
+	//計算金額(需要加上mutex)
+	p.PlayerMoney -= bet
+	p.PlayerMoney += bet * t.AllOdds
+	//封裝訊息
+	msg := &pb.ReturnGameResult{
+		AllMoney:   p.PlayerMoney,
+		GetMoney:   bet * t.AllOdds,
+		GameResult: t,
+	}
 
-	p.SendMsg(100, t)
+	p.SendMsg(100, msg)
 
 }
