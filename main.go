@@ -51,7 +51,7 @@ func main() {
 
 	//註冊路由
 	ser.AddRouter(100, &api.NormalGameApi{})
-	//ser.AddRouter()
+	ser.AddRouter(150, &api.BroadCastApi{})
 
 	ser.Serve()
 

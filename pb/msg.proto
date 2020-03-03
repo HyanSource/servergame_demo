@@ -33,7 +33,9 @@ message GameResult {
 message ReturnGameResult {
     int32 AllMoney=1;
     int32 GetMoney=2;
-    GameResult GameResult=3;
+    int32 FreeCount=3;
+    int32 FreeRound=4;
+    GameResult GameResult=5;
 }
 //聊天訊息
 message TalkMsg {   

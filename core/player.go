@@ -11,10 +11,12 @@ import (
 
 //玩家資訊的結構體
 type Player struct {
-	PlayerID    int32
-	Conn        ziface.IConnection
-	PlayerName  string
-	PlayerMoney int32
+	PlayerID    int32              //玩家ID
+	Conn        ziface.IConnection //連線
+	PlayerName  string             //玩家名字
+	PlayerMoney int32              //玩家金錢
+	FreeCount   int32              //免費次數
+	FreeRound   int32              //免費回合
 }
 
 //全局ID
@@ -38,6 +40,8 @@ func NewPlayer(conn ziface.IConnection) *Player {
 		Conn:        conn,
 		PlayerName:  "",
 		PlayerMoney: 10000,
+		FreeCount:   0,
+		FreeRound:   0,
 	}
 
 	return p
@@ -113,10 +117,18 @@ func (p *Player) PlayNormalGame(bet int32) {
 	//計算金額(需要加上mutex)
 	p.PlayerMoney -= bet
 	p.PlayerMoney += bet * t.AllOdds
+
+	//獲得免費遊戲
+	if t.ScatterCount == 3 {
+		p.FreeCount = 10
+	}
+
 	//封裝訊息
 	msg := &pb.ReturnGameResult{
 		AllMoney:   p.PlayerMoney,
 		GetMoney:   bet * t.AllOdds,
+		FreeCount:  p.FreeCount,
+		FreeRound:  p.FreeRound,
 		GameResult: t,
 	}
 
