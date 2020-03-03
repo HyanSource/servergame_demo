@@ -123,3 +123,19 @@ func (p *Player) PlayNormalGame(bet int32) {
 	p.SendMsg(100, msg)
 
 }
+
+//廣播給所有人
+func (p *Player) AllBroadCast(talkmsg string) {
+
+	msg := &pb.BroadCast{
+		PlayerID: p.PlayerID,
+		TalkMsg:  &pb.TalkMsg{Content: talkmsg},
+	}
+
+	GetPlayers := PlayerManageInstance.GetAllPlayerData()
+
+	for _, v := range GetPlayers {
+		v.SendMsg(150, msg)
+	}
+
+}
