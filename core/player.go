@@ -103,6 +103,8 @@ func (p *Player) SendMsg(msgID uint32, data proto.Message) {
 //遊玩一次normalgame
 func (p *Player) PlayNormalGame(bet int32) {
 
+	t := &pb.GameResult{}
+
 	if (p.PlayerMoney - bet) < 0 {
 		fmt.Println("playermoney<=0")
 		return
@@ -112,10 +114,11 @@ func (p *Player) PlayNormalGame(bet int32) {
 		fmt.Println("bet==0")
 		return
 	}
-	//取得盤面
-	t := NewGameResult(RandomGet())
-	//計算金額(需要加上mutex)
 	p.PlayerMoney -= bet
+
+	//取得盤面
+	t = NewGameResult(RandomGet(p.FreeRound), p.FreeRound)
+	//計算金額(需要加上mutex)
 	p.PlayerMoney += bet * t.AllOdds
 
 	//獲得免費遊戲

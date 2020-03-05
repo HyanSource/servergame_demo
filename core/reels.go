@@ -77,18 +77,55 @@ var (
 )
 
 //取得隨機的盤面
-func RandomGet() [15]int {
+func RandomGet(gameround int32) [15]int {
 
 	ReturnLott := [15]int{}
 
 	for i := 0; i < 5; i++ {
-		reelmax := len(Reels[i]) - 1
-		r := rand.Intn(reelmax)
 
-		//fmt.Println("r:", r)
-		ReturnLott[10+i] = Reels[i][r]
-		ReturnLott[5+i] = Reels[i][GetReelIndex(r, reelmax)]
-		ReturnLott[i] = Reels[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
+		switch gameround {
+		case 0: //一般
+			{
+				reelmax := len(Reels[i]) - 1
+				r := rand.Intn(reelmax)
+
+				ReturnLott[10+i] = Reels[i][r]
+				ReturnLott[5+i] = Reels[i][GetReelIndex(r, reelmax)]
+				ReturnLott[i] = Reels[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
+			}
+			break
+		case 1: //免費第一回合
+			{
+				reelmax := len(Reels_FreeGame01[i]) - 1
+				r := rand.Intn(reelmax)
+
+				ReturnLott[10+i] = Reels_FreeGame01[i][r]
+				ReturnLott[5+i] = Reels_FreeGame01[i][GetReelIndex(r, reelmax)]
+				ReturnLott[i] = Reels_FreeGame01[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
+			}
+			break
+		case 2: //免費第二回合
+			{
+				reelmax := len(Reels_FreeGame02[i]) - 1
+				r := rand.Intn(reelmax)
+
+				ReturnLott[10+i] = Reels_FreeGame02[i][r]
+				ReturnLott[5+i] = Reels_FreeGame02[i][GetReelIndex(r, reelmax)]
+				ReturnLott[i] = Reels_FreeGame02[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
+			}
+			break
+		case 3: //免費第三回合
+			{
+				reelmax := len(Reels_FreeGame03[i]) - 1
+				r := rand.Intn(reelmax)
+
+				ReturnLott[10+i] = Reels_FreeGame03[i][r]
+				ReturnLott[5+i] = Reels_FreeGame03[i][GetReelIndex(r, reelmax)]
+				ReturnLott[i] = Reels_FreeGame03[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
+			}
+			break
+		}
+
 	}
 
 	return ReturnLott
@@ -123,7 +160,7 @@ func GetReelIndex(NowIndex int, reelmax int) int {
 }
 
 //新增一個遊戲結果的物件
-func NewGameResult(Lott [15]int) *pb.GameResult {
+func NewGameResult(Lott [15]int, gameround int32) *pb.GameResult {
 
 	//儲存每個得獎
 	alllineodds := make([]*pb.LineOdds, 0)
@@ -173,10 +210,47 @@ func NewGameResult(Lott [15]int) *pb.GameResult {
 	}
 
 	//計算免費個數
-	for i := range Lott {
-		if Lott[i] == FreeID {
-			scattercount++
+
+	switch gameround {
+	case 0:
+		{
+			for i := range Lott {
+				if Lott[i] == FreeID {
+					scattercount++
+				}
+			}
+
 		}
+		break
+	case 1:
+		{
+			for i := range Lott {
+				if i != 1 && i != 6 && i != 11 {
+					if Lott[i] == FreeID {
+						scattercount++
+					}
+				}
+
+			}
+		}
+		break
+	case 2:
+		{
+			for i := range Lott {
+				if i != 1 && i != 6 && i != 11 && i != 2 && i != 7 && i != 12 {
+					if Lott[i] == FreeID {
+						scattercount++
+					}
+				}
+
+			}
+		}
+		break
+	case 3:
+		{
+			scattercount = 0
+		}
+		break
 	}
 
 	return &pb.GameResult{

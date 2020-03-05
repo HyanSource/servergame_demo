@@ -13,7 +13,7 @@ func TestReelsResult(t *testing.T) {
 }
 
 func TestRandomResult(t *testing.T) {
-	a := NewGameResult(RandomGet())
+	a := NewGameResult(RandomGet(0))
 	fmt.Println(a.Result)
 }
 
