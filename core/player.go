@@ -38,7 +38,7 @@ func NewPlayer(conn ziface.IConnection) *Player {
 	p := &Player{
 		PlayerID:    id,
 		Conn:        conn,
-		PlayerName:  "",
+		PlayerName:  "Guest",
 		PlayerMoney: 10000,
 		FreeCount:   0,
 		FreeRound:   0,

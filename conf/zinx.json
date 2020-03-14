@@ -1,9 +1,9 @@
 {
     "Name": "HyanZinxdemo01",
     "Host": "127.0.0.1",
-    "TcpPort":7777,
-    "MaxConn":3,
-    "WorkerPoolSize":10,
-    "LogDir":"./mylog",
-    "LogFile":"zinx.log"
+    "TcpPort": 7777,
+    "MaxConn": 300,
+    "WorkerPoolSize": 10,
+    "LogDir": "./mylog",
+    "LogFile": "zinx.log"
 }
