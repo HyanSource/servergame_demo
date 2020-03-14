@@ -3,8 +3,8 @@ package core
 import (
 	"fmt"
 	"sync"
-	"zinx/ziface"
 
+	"github.com/aceld/zinx/ziface"
 	"github.com/golang/protobuf/proto"
 	"github.com/hyansource/servergame_demo/pb" //pb
 )
@@ -105,25 +105,37 @@ func (p *Player) PlayNormalGame(bet int32) {
 
 	t := &pb.GameResult{}
 
-	if (p.PlayerMoney - bet) < 0 {
-		fmt.Println("playermoney<=0")
-		return
-	}
+	if p.FreeCount <= 0 { //普通模式
+		if (p.PlayerMoney - bet) < 0 {
+			fmt.Println("playermoney<=0")
+			return
+		}
 
-	if bet == 0 {
-		fmt.Println("bet==0")
-		return
-	}
-	p.PlayerMoney -= bet
+		if bet == 0 {
+			fmt.Println("bet==0")
+			return
+		}
+		p.PlayerMoney -= bet
 
-	//取得盤面
-	t = NewGameResult(RandomGet(p.FreeRound), p.FreeRound)
-	//計算金額(需要加上mutex)
-	p.PlayerMoney += bet * t.AllOdds
+		//取得盤面
+		t = NewGameResult(RandomGet(0), 0)
+		//計算金額(需要加上mutex)
+		p.PlayerMoney += bet * t.AllOdds
 
-	//獲得免費遊戲
-	if t.ScatterCount == 3 {
-		p.FreeCount = 10
+		//獲得免費遊戲
+		if t.ScatterCount == 3 {
+			p.FreeCount = 10
+		}
+	} else { //特殊模式
+		//取得盤面
+		t = NewGameResult(RandomGet(p.FreeRound), p.FreeRound)
+
+		//計算金額(需要加上mutex)
+		p.PlayerMoney += bet * t.AllOdds
+		//獲得免費遊戲(需要經過單元測試(testing)驗證)
+		if t.ScatterCount > 0 {
+			p.FreeCount += t.ScatterCount
+		}
 	}
 
 	//封裝訊息

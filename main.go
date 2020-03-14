@@ -7,7 +7,6 @@ import (
 	"github.com/aceld/zinx/znet"
 
 	"github.com/hyansource/servergame_demo/api"
-	_ "github.com/hyansource/servergame_demo/api"
 	"github.com/hyansource/servergame_demo/core"
 )
 
@@ -21,6 +20,9 @@ func OnConnectionAdd(conn ziface.IConnection) {
 
 	//將該連接綁定屬性id
 	conn.SetProperty("id", player.PlayerID)
+
+	//回傳PlayerID給客戶端
+	player.OnLineEvent()
 
 	fmt.Println("client success")
 }
