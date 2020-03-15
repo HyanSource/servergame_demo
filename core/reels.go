@@ -39,41 +39,6 @@ var (
 	Odds [11][3]int = [11][3]int{{5, 20, 100}, {5, 25, 125}, {5, 25, 125}, {10, 25, 125}, {10, 25, 125}, {20, 100, 300}, {20, 100, 300}, {25, 150, 500}, {50, 250, 1000}, {0, 0, 0}, {0, 0, 0}}
 	//連線位置
 	WinLines [20][5]int = [20][5]int{{5, 6, 7, 8, 9}, {0, 1, 2, 3, 4}, {10, 11, 12, 13, 14}, {0, 6, 12, 8, 4}, {10, 6, 2, 8, 14}, {0, 1, 7, 13, 14}, {10, 11, 7, 3, 4}, {5, 1, 7, 13, 9}, {5, 11, 7, 3, 9}, {0, 6, 7, 8, 14}, {10, 6, 7, 8, 4}, {5, 1, 2, 8, 14}, {5, 11, 12, 8, 4}, {5, 6, 2, 8, 14}, {5, 6, 12, 8, 4}, {0, 1, 7, 13, 9}, {10, 11, 7, 3, 9}, {5, 1, 7, 13, 14}, {5, 11, 7, 3, 4}, {0, 1, 2, 8, 14}}
-
-	//滾輪長度
-	Reels [5][]int = [5][]int{
-		[]int{0, 2, 1, 4, 6, 1, 4, 1, 0, 0, 0, 3, 0, 4, 2, 2, 2, 5, 5, 0, 1, 6, 5, 3, 7, 1, 6, 2, 8, 0, 6, 4, 5, 7, 3, 5, 2, 1, 0, 3, 4, 3, 0, 1, 1, 7, 1, 2, 0, 2},
-		[]int{2, 7, 1, 5, 6, 3, 0, 5, 2, 1, 0, 4, 3, 1, 2, 2, 5, 1, 0, 8, 0, 3, 5, 1, 2, 3, 8, 6, 1, 1, 4, 4, 9, 7, 7, 0, 6, 3, 2, 2, 0, 5, 0, 4, 0, 0, 10, 4, 1, 6},
-		[]int{3, 2, 0, 5, 7, 10, 7, 1, 2, 0, 0, 6, 0, 5, 2, 3, 4, 8, 8, 0, 4, 7, 0, 2, 1, 6, 3, 4, 2, 6, 1, 5, 3, 2, 9, 1, 0, 1, 0, 4, 1, 6, 5, 4, 0, 5, 3, 1, 1, 2},
-		[]int{1, 3, 0, 1, 7, 7, 1, 4, 5, 6, 2, 4, 6, 3, 0, 9, 0, 4, 0, 2, 3, 5, 0, 10, 4, 0, 5, 0, 8, 2, 2, 5, 5, 2, 3, 0, 2, 1, 6, 8, 7, 1, 3, 1, 6, 1, 4, 0, 1, 2},
-		[]int{8, 4, 3, 0, 5, 6, 1, 1, 2, 2, 0, 3, 7, 3, 2, 3, 7, 4, 5, 0, 4, 8, 1, 3, 2, 6, 6, 5, 2, 7, 0, 4, 0, 0, 5, 1, 2, 2, 1, 1, 6, 4, 0, 9, 0, 3, 0, 5, 1, 1},
-	}
-	//免費模式第一回合
-	Reels_FreeGame01 [5][]int = [5][]int{
-		[]int{0, 2, 1, 4, 6, 1, 4, 1, 0, 0, 0, 3, 0, 4, 2, 2, 2, 5, 5, 0, 1, 6, 5, 3, 7, 1, 6, 2, 8, 0, 6, 4, 5, 7, 3, 5, 2, 1, 0, 3, 4, 3, 0, 1, 1, 7, 1, 2, 0, 2},
-		[]int{9, 9, 9, 9, 9},
-		[]int{3, 2, 0, 5, 7, 10, 7, 1, 2, 0, 0, 6, 0, 5, 2, 3, 4, 8, 8, 0, 4, 7, 0, 2, 1, 6, 3, 4, 2, 6, 1, 5, 3, 2, 9, 1, 0, 1, 0, 4, 1, 6, 5, 4, 0, 5, 3, 1, 1, 2},
-		[]int{1, 3, 0, 1, 7, 7, 1, 4, 5, 6, 2, 4, 6, 3, 0, 9, 0, 4, 0, 2, 3, 5, 0, 10, 4, 0, 5, 0, 8, 2, 2, 5, 5, 2, 3, 0, 2, 1, 6, 8, 7, 1, 3, 1, 6, 1, 4, 0, 1, 2},
-		[]int{8, 4, 3, 0, 5, 6, 1, 1, 2, 2, 0, 3, 7, 3, 2, 3, 7, 4, 5, 0, 4, 8, 1, 3, 2, 6, 6, 5, 2, 7, 0, 4, 0, 0, 5, 1, 2, 2, 1, 1, 6, 4, 0, 9, 0, 3, 0, 5, 1, 1},
-	}
-
-	//免費模式第二回合
-	Reels_FreeGame02 [5][]int = [5][]int{
-		[]int{0, 2, 1, 4, 6, 1, 4, 1, 0, 0, 0, 3, 0, 4, 2, 2, 2, 5, 5, 0, 1, 6, 5, 3, 7, 1, 6, 2, 8, 0, 6, 4, 5, 7, 3, 5, 2, 1, 0, 3, 4, 3, 0, 1, 1, 7, 1, 2, 0, 2},
-		[]int{9, 9, 9, 9, 9},
-		[]int{9, 9, 9, 9, 9},
-		[]int{1, 3, 0, 1, 7, 7, 1, 4, 5, 6, 2, 4, 6, 3, 0, 9, 0, 4, 0, 2, 3, 5, 0, 10, 4, 0, 5, 0, 8, 2, 2, 5, 5, 2, 3, 0, 2, 1, 6, 8, 7, 1, 3, 1, 6, 1, 4, 0, 1, 2},
-		[]int{8, 4, 3, 0, 5, 6, 1, 1, 2, 2, 0, 3, 7, 3, 2, 3, 7, 4, 5, 0, 4, 8, 1, 3, 2, 6, 6, 5, 2, 7, 0, 4, 0, 0, 5, 1, 2, 2, 1, 1, 6, 4, 0, 9, 0, 3, 0, 5, 1, 1},
-	}
-
-	//免費模式第三回合
-	Reels_FreeGame03 [5][]int = [5][]int{
-		[]int{0, 2, 1, 4, 6, 1, 4, 1, 0, 0, 0, 3, 0, 4, 2, 2, 2, 5, 5, 0, 1, 6, 5, 3, 7, 1, 6, 2, 8, 0, 6, 4, 5, 7, 3, 5, 2, 1, 0, 3, 4, 3, 0, 1, 1, 7, 1, 2, 0, 2},
-		[]int{9, 9, 9, 9, 9},
-		[]int{9, 9, 9, 9, 9},
-		[]int{9, 9, 9, 9, 9},
-		[]int{8, 4, 3, 0, 5, 6, 1, 1, 2, 2, 0, 3, 7, 3, 2, 3, 7, 4, 5, 0, 4, 8, 1, 3, 2, 6, 6, 5, 2, 7, 0, 4, 0, 0, 5, 1, 2, 2, 1, 1, 6, 4, 0, 9, 0, 3, 0, 5, 1, 1},
-	}
 )
 
 //取得隨機的盤面
@@ -83,48 +48,12 @@ func RandomGet(gameround int32) [15]int {
 
 	for i := 0; i < 5; i++ {
 
-		switch gameround {
-		case 0: //一般
-			{
-				reelmax := len(Reels[i]) - 1
-				r := rand.Intn(reelmax)
+		reelmax := len(AllModeReels[gameround].Reels[i]) - 1
+		r := rand.Intn(reelmax)
 
-				ReturnLott[10+i] = Reels[i][r]
-				ReturnLott[5+i] = Reels[i][GetReelIndex(r, reelmax)]
-				ReturnLott[i] = Reels[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
-			}
-			break
-		case 1: //免費第一回合
-			{
-				reelmax := len(Reels_FreeGame01[i]) - 1
-				r := rand.Intn(reelmax)
-
-				ReturnLott[10+i] = Reels_FreeGame01[i][r]
-				ReturnLott[5+i] = Reels_FreeGame01[i][GetReelIndex(r, reelmax)]
-				ReturnLott[i] = Reels_FreeGame01[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
-			}
-			break
-		case 2: //免費第二回合
-			{
-				reelmax := len(Reels_FreeGame02[i]) - 1
-				r := rand.Intn(reelmax)
-
-				ReturnLott[10+i] = Reels_FreeGame02[i][r]
-				ReturnLott[5+i] = Reels_FreeGame02[i][GetReelIndex(r, reelmax)]
-				ReturnLott[i] = Reels_FreeGame02[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
-			}
-			break
-		case 3: //免費第三回合
-			{
-				reelmax := len(Reels_FreeGame03[i]) - 1
-				r := rand.Intn(reelmax)
-
-				ReturnLott[10+i] = Reels_FreeGame03[i][r]
-				ReturnLott[5+i] = Reels_FreeGame03[i][GetReelIndex(r, reelmax)]
-				ReturnLott[i] = Reels_FreeGame03[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
-			}
-			break
-		}
+		ReturnLott[10+i] = AllModeReels[gameround].Reels[i][r]
+		ReturnLott[5+i] = AllModeReels[gameround].Reels[i][GetReelIndex(r, reelmax)]
+		ReturnLott[i] = AllModeReels[gameround].Reels[i][GetReelIndex(GetReelIndex(r, reelmax), reelmax)]
 
 	}
 
@@ -141,11 +70,11 @@ func SpecificGet(ID [5]int) [15]int {
 			panic("取得特定盤面錯誤:" + strconv.Itoa(ID[i]))
 		}
 
-		reelmax := len(Reels[i]) - 1
+		reelmax := len(AllModeReels[0].Reels[i]) - 1
 
-		ReturnLott[10+i] = Reels[i][ID[i]]
-		ReturnLott[5+i] = Reels[i][GetReelIndex(ID[i], reelmax)]
-		ReturnLott[i] = Reels[i][GetReelIndex(GetReelIndex(ID[i], reelmax), reelmax)]
+		ReturnLott[10+i] = AllModeReels[0].Reels[i][ID[i]]
+		ReturnLott[5+i] = AllModeReels[0].Reels[i][GetReelIndex(ID[i], reelmax)]
+		ReturnLott[i] = AllModeReels[0].Reels[i][GetReelIndex(GetReelIndex(ID[i], reelmax), reelmax)]
 	}
 
 	return ReturnLott
@@ -216,48 +145,6 @@ func NewGameResult(Lott [15]int, gameround int32) *pb.GameResult {
 			scattercount++
 		}
 	}
-
-	// switch gameround {
-	// case 0:
-	// 	{
-	// 		for i := range Lott {
-	// 			if Lott[i] == FreeID {
-	// 				scattercount++
-	// 			}
-	// 		}
-
-	// 	}
-	// 	break
-	// case 1:
-	// 	{
-	// 		for i := range Lott {
-	// 			if i != 1 && i != 6 && i != 11 {
-	// 				if Lott[i] == FreeID {
-	// 					scattercount++
-	// 				}
-	// 			}
-
-	// 		}
-	// 	}
-	// 	break
-	// case 2:
-	// 	{
-	// 		for i := range Lott {
-	// 			if i != 1 && i != 6 && i != 11 && i != 2 && i != 7 && i != 12 {
-	// 				if Lott[i] == FreeID {
-	// 					scattercount++
-	// 				}
-	// 			}
-
-	// 		}
-	// 	}
-	// 	break
-	// case 3:
-	// 	{
-	// 		scattercount = 0
-	// 	}
-	// 	break
-	// }
 
 	return &pb.GameResult{
 		Result:       ArrayToString(Lott, ","),

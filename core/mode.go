@@ -23,10 +23,11 @@ func (t *Mode) WildCount(lott [15]int, freeid int) int {
 
 var (
 	//目前所有模式
-	AllModeReels map[int]Mode
+	AllModeReels map[int32]Mode
 )
 
 func init() {
+	AllModeReels = make(map[int32]Mode)
 	//普通模式
 	AllModeReels[0] = Mode{
 		Reels: [5][]int{
