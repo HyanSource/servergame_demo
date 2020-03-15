@@ -105,8 +105,10 @@ func (p *Player) PlayNormalGame(bet int32) {
 
 	t := &pb.GameResult{}
 
+	allbet := bet * 20
+
 	if p.FreeCount <= 0 { //普通模式
-		if (p.PlayerMoney - bet) < 0 {
+		if (p.PlayerMoney - allbet) < 0 {
 			fmt.Println("playermoney<=0")
 			return
 		}
@@ -115,7 +117,8 @@ func (p *Player) PlayNormalGame(bet int32) {
 			fmt.Println("bet==0")
 			return
 		}
-		p.PlayerMoney -= bet
+		//扣掉總下注
+		p.PlayerMoney -= allbet
 
 		//取得盤面
 		t = NewGameResult(RandomGet(0), 0)
