@@ -137,8 +137,11 @@ func (p *Player) PlayNormalGame(bet int32) {
 		p.PlayerMoney += bet * t.AllOdds
 		//獲得免費遊戲(需要經過單元測試(testing)驗證)
 		if t.ScatterCount > 0 {
+			//在第一回合時有可能會有加2次免費遊戲
 			p.FreeCount += t.ScatterCount
 		}
+
+		p.FreeCount--
 	}
 
 	//封裝訊息
